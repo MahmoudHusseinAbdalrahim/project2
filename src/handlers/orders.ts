@@ -5,13 +5,23 @@ import jwt, {Secret} from 'jsonwebtoken'
 const store = new OrderStore()
 
 const index = async (_req: Request, res: Response) => {
-  const orders = await store.index()
-  res.json(orders)
+  try {
+    const orders = await store.index()
+    res.json(orders)
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
 }
 
 const show = async (req: Request, res: Response) => {
-   const order = await store.show(req.params.id as unknown as number)
-   res.json(order)
+   try {
+    const order = await store.show(req.params.id as unknown as number)
+    res.json(order)
+   } catch (err) {
+    res.status(400)
+    res.json(err)
+   }
 }
 
 const create = async (req: Request, res: Response) => {
@@ -82,24 +92,34 @@ const addProduct = async (req: Request, res: Response) => {
   } 
 
   const orderByuser = async (req: Request, res: Response) => {
-    const order = await store.orderByUser(req.params.user_id as unknown as number)
-    res.json(order)
+    try {
+        const order = await store.orderByUser(req.params.user_id as unknown as number)
+        res.json(order)
+    } catch (err) {
+        res.status(400)
+        res.json(err)
+    }
  }
 
  const completedOrderByuser = async (req: Request, res: Response) => {
-    const order = await store.completedOrderByUser(req.params.user_id as unknown as number)
-    res.json(order)
+    try {
+        const order = await store.completedOrderByUser(req.params.user_id as unknown as number)
+        res.json(order)
+    } catch (err) {
+        res.status(400)
+        res.json(err)
+    }
  }
 
 
 const orderRoutes = (app: express.Application) => {
-  app.get('/orders', index)
-  app.get('/orders/:id', show)
+  app.get('/orders', verifyAuthToken, index)
+  app.get('/orders/:id', verifyAuthToken, show)
   app.post('/orders', verifyAuthToken, create)
   app.put('/updateorders/:id', verifyAuthToken, update)
   app.delete('/delorders/:id', verifyAuthToken, destroy)
   // add product
-  app.post('/orders/:id/products', addProduct)
+  app.post('/orders/:id/products',verifyAuthToken, addProduct)
   app.get('/order-by-user/:user_id',verifyAuthToken, orderByuser)
   app.get('/complete-order-by-user/:user_id',verifyAuthToken, completedOrderByuser)
 }

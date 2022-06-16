@@ -5,13 +5,23 @@ import jwt, {Secret} from 'jsonwebtoken'
 const store = new ProductStore()
 
 const index = async (_req: Request, res: Response) => {
-  const products = await store.index()
-  res.json({data: products})
+  try {
+    const products = await store.index()
+    res.json({data: products})
+  } catch (err) {
+    res.status(400)
+    res.json(err)
+  }
 }
 
 const show = async (req: Request, res: Response) => {
-   const product = await store.show(req.params.id as unknown as number)
-   res.json({data: {...product}})
+   try {
+    const product = await store.show(req.params.id as unknown as number)
+    res.json({data: {...product}})
+   } catch (err) {
+    res.status(400)
+    res.json(err)
+   }
 }
 
 const create = async (req: Request, res: Response) => {
@@ -41,8 +51,13 @@ const getFiveMostPopularProduct = async (req: Request, res: Response) => {
 }
 
 const getProductsByCategory = async (req: Request, res: Response) => {
-    const products = await store.productsByCategory(req.params.category)
-    res.json(products)
+    try{
+        const products = await store.productsByCategory(req.params.category)
+        res.json(products)
+    } catch (err) {
+        res.status(400)
+        res.json(err)
+    }
  }
 
 const verifyAuthToken = (req: Request, res: Response, next: () => void) => {
@@ -59,8 +74,8 @@ const verifyAuthToken = (req: Request, res: Response, next: () => void) => {
 }
 
 const productRoutes = (app: express.Application) => {
-  app.get('/products', index)
-  app.get('/products/:id', show)
+  app.get('/products', verifyAuthToken, index)
+  app.get('/products/:id', verifyAuthToken, show)
   app.post('/products',verifyAuthToken, create)
   app.get('/five-most-popular', getFiveMostPopularProduct)
   app.get('/products-by-category/:category', getProductsByCategory)

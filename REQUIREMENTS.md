@@ -28,24 +28,29 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Add Product Route : 'orders/:id/products' [POST]
 - Current Order by user (args: user id)[token required] - Order By User Route : 'order-by-user/:user_id' [GET]
 - [OPTIONAL] Completed Orders by user (args: user id)[token required] - Completed Ordered By User Route : 'complete-order-by-user/:user_id' [GET]
-
+## Databases
+- full_stack_dev database for development
+- full_stack_test database for testing
 ## Data Shapes
 #### Product
--  id
-- name
-- price
-- [OPTIONAL] category
+-  id  (Column name: id , Type: integer)
+- name  (Column name: name , Type: character varying)
+- price  (Column name: price , Type: double precision)
+- [OPTIONAL] category  (Column name: category , Type: character varying(100))
 
 #### User
-- id
-- firstName
-- lastName
-- password
+- id  (Column name: id , Type: integer) 
+- firstName (Column name: first_name , Type: character varying)
+- lastName (Column name: last_name , Type: character varying)
+- password (Column name: password , Type: character varying(100))
 
 #### Orders
-- id
-- id of each product in the order
-- quantity of each product in the order
-- user_id
-- status of order (active or complete)
+- id  (Column name: id , Type: integer)
+- user_id  (Column name: user_id , Type: bigint)
+- status of order (active or complete)  (Column name: status , Type: character varying(10))
 
+#### order_products
+- id  (Column name: id , Type: integer)
+- quantity  (Column name: quantity , Type: integer)
+- order_id  (Column name: order_id , Type: bigint)
+- product_id  (Column name: product_id , Type: bigint)

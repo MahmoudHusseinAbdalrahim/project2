@@ -64,6 +64,7 @@ describe('Test products endpoint responses', (): void => {
     it('index route endpoint', async() => {
         const response = await request.get('/products')
         .set('Content-type', 'application/json')
+        .set('Authorization', `Bearer ${token}`)
         expect(response.status).toBe(200);
         expect(response.body.data.length).toBe(1);
     })
@@ -72,6 +73,7 @@ describe('Test products endpoint responses', (): void => {
     it('show route endpoint', async() => {
         const response = await request.get('/products/1')
         .set('Content-type', 'application/json')
+        .set('Authorization', `Bearer ${token}`)
         expect(response.status).toBe(200);
         const {name, price, category} = response.body.data;
         expect(name).toBe('LG 43');
