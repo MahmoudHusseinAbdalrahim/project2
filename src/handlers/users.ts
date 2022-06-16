@@ -21,9 +21,9 @@ const create = async (req: Request, res: Response) => {
             last_name: req.body.last_name,
             password: req.body.password
         }
-
         const newUser = await store.create(user)
-        res.json({data: {...newUser}})
+        var token = jwt.sign({user: newUser}, process.env.TOKEN_SECRET as string)
+        res.json({data: {...newUser, token}})
     } catch(err) {
         res.status(400)
         res.json(err)
@@ -92,7 +92,7 @@ const verifyAuthToken = (req: Request, res: Response, next: () => void) => {
 const userRoutes = (app: express.Application) => {
   app.get('/users', verifyAuthToken, index)
   app.get('/users/:id', verifyAuthToken, show)
-  app.post('/users',verifyAuthToken, create)
+  app.post('/users', create)
   app.put('/updateusers/:id',verifyAuthToken, update)
   app.delete('/delusers/:id', verifyAuthToken, destroy)
   app.post('/users/authenticate', authenticate)

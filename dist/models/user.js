@@ -217,11 +217,9 @@ var UserStore = /** @class */ (function () {
                         return [4 /*yield*/, conn.query(sql, [first_name, last_name])];
                     case 2:
                         result = _a.sent();
-                        console.log(password + pepper);
                         if (result.rows.length) {
                             user = result.rows[0];
                             conn.release();
-                            console.log(user);
                             if (bcrypt_1["default"].compareSync(password + pepper, user.password)) {
                                 return [2 /*return*/, user];
                             }

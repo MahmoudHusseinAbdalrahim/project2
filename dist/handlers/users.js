@@ -72,13 +72,13 @@ var show = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
             case 0: return [4 /*yield*/, store.show(req.params.id)];
             case 1:
                 user = _a.sent();
-                res.json(user);
+                res.json({ data: __assign({}, user) });
                 return [2 /*return*/];
         }
     });
 }); };
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newUser, err_1;
+    var user, newUser, token, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -91,7 +91,8 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, store.create(user)];
             case 1:
                 newUser = _a.sent();
-                res.json({ data: __assign({}, newUser) });
+                token = jsonwebtoken_1["default"].sign({ user: newUser }, process.env.TOKEN_SECRET);
+                res.json({ data: __assign(__assign({}, newUser), { token: token }) });
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
@@ -116,7 +117,7 @@ var update = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, store.update(req.params.id, user)];
             case 1:
                 updatedUser = _a.sent();
-                res.json(updatedUser);
+                res.json({ data: __assign({}, updatedUser) });
                 return [3 /*break*/, 3];
             case 2:
                 err_2 = _a.sent();
@@ -136,7 +137,7 @@ var destroy = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 return [4 /*yield*/, store.destroy(req.params.id)];
             case 1:
                 deleted = _a.sent();
-                res.json(deleted);
+                res.json({ data: { deleted: deleted } });
                 return [3 /*break*/, 3];
             case 2:
                 err_3 = _a.sent();
@@ -191,7 +192,7 @@ var verifyAuthToken = function (req, res, next) {
 var userRoutes = function (app) {
     app.get('/users', verifyAuthToken, index);
     app.get('/users/:id', verifyAuthToken, show);
-    app.post('/users', verifyAuthToken, create);
+    app.post('/users', create);
     app.put('/updateusers/:id', verifyAuthToken, update);
     app["delete"]('/delusers/:id', verifyAuthToken, destroy);
     app.post('/users/authenticate', authenticate);

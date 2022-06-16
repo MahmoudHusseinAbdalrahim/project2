@@ -184,7 +184,7 @@ var ProductStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'select products.name from products join order_products on products.id = order_products.product_id  group by products.name  order by count(*) desc limit 5';
+                        sql = 'SELECT products.name FROM products JOIN order_products ON products.id = order_products.product_id  GROUP BY products.name ORDER BY count(*) DESC LIMIT 5';
                         return [4 /*yield*/, conn.query(sql)];
                     case 2:
                         result = _a.sent();
@@ -209,7 +209,7 @@ var ProductStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = 'select * from products where category = ($1)';
+                        sql = 'SELECT * FROM products WHERE category = ($1)';
                         return [4 /*yield*/, conn.query(sql, [category])];
                     case 2:
                         result = _a.sent();
